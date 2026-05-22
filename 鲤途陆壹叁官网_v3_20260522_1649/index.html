@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>鲤途·陆壹叁 — 南洋风格住宿</title>
+<style>
+/* ========== RESET & BASE ========== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:'Georgia','Noto Serif SC','Songti SC',serif;color:#2D3436;background:#FDF6EC;line-height:1.8;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+
+/* ========== COLOR TOKENS ========== */
+:root{
+  --navy:#1A4D5C;
+  --navy-deep:#0E3340;
+  --navy-light:#2A6F82;
+  --cream:#FDF6EC;
+  --cream-dark:#F5ECD7;
+  --gold:#C8956C;
+  --gold-light:#E8C9A8;
+  --red-brick:#B8544F;
+  --red-brick-light:#D4856F;
+  --text-dark:#2D3436;
+  --text-muted:#6B7280;
+  --white:#FFFFFF;
+  --border:#E5D9C3;
+  --shadow:rgba(26,77,92,0.08);
+}
+
+/* ========== NAV ========== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(253,246,236,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow .3s}
+.nav.scrolled{box-shadow:0 2px 20px var(--shadow)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{display:flex;align-items:center;gap:10px}
+.nav-logo img{height:32px;width:auto;object-fit:contain}
+.nav-logo-text{font-size:18px;font-weight:700;color:var(--navy);letter-spacing:2px}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-size:14px;color:var(--text-dark);letter-spacing:1px;position:relative;transition:color .3s}
+.nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--navy);transition:width .3s}
+.nav-links a:hover{color:var(--navy)}
+.nav-links a:hover::after{width:100%}
+.nav-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.nav-toggle span{display:block;width:24px;height:2px;background:var(--navy);transition:all .3s;border-radius:2px}
+
+/* ========== HERO ========== */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy-deep);overflow:hidden}
+.hero-pattern{position:absolute;inset:0;opacity:.08;background-image:
+  repeating-linear-gradient(45deg,transparent,transparent 20px,var(--cream) 20px,var(--cream) 21px),
+  repeating-linear-gradient(-45deg,transparent,transparent 20px,var(--cream) 20px,var(--cream) 21px);
+}
+.hero-arch{position:absolute;bottom:0;left:0;right:0;height:180px;background:var(--cream);border-radius:50% 50% 0 0 / 100% 100% 0 0}
+.hero-content{position:relative;z-index:2;text-align:center;color:var(--cream);padding:0 24px;max-width:800px}
+.hero-tag{display:inline-block;padding:6px 20px;border:1px solid var(--gold-light);border-radius:30px;font-size:12px;letter-spacing:4px;color:var(--gold-light);margin-bottom:24px;text-transform:uppercase}
+.hero-title{font-size:clamp(36px,7vw,72px);font-weight:700;letter-spacing:6px;margin-bottom:16px;line-height:1.2}
+.hero-title span{color:var(--gold)}
+.hero-sub{font-size:clamp(15px,2.5vw,20px);color:var(--gold-light);letter-spacing:3px;margin-bottom:44px;font-weight:300}
+.hero-logo-wrap{margin-bottom:20px}
+.hero-logo{height:min(45vh,340px);width:auto;display:block;filter:drop-shadow(0 4px 20px rgba(0,0,0,.35))}
+.hero-btn{display:inline-block;padding:14px 40px;background:var(--gold);color:var(--white);font-size:14px;letter-spacing:3px;border-radius:4px;transition:all .3s}
+.hero-btn:hover{background:var(--red-brick);transform:translateY(-2px)}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:3;animation:float 2s ease-in-out infinite}
+.hero-scroll svg{width:24px;height:24px;color:var(--gold-light);opacity:.6}
+@keyframes float{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+
+/* ========== SECTIONS ========== */
+.section{padding:80px 24px;max-width:1200px;margin:0 auto}
+.section-tag{display:inline-block;font-size:12px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.section-title{font-size:clamp(24px,4vw,36px);color:var(--navy-deep);font-weight:700;letter-spacing:3px;margin-bottom:16px}
+.section-line{width:60px;height:3px;background:var(--gold);margin-bottom:40px}
+.section-desc{font-size:15px;color:var(--text-muted);max-width:600px;line-height:1.8;margin-bottom:48px}
+
+/* ========== ABOUT ========== */
+.about{background:var(--cream)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.about-img{position:relative;border-radius:12px;overflow:hidden;aspect-ratio:4/5}
+.about-img-inner{position:absolute;inset:0}
+.about-features{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px}
+.about-feat{display:flex;align-items:flex-start;gap:12px;padding:16px;background:var(--white);border-radius:8px;border:1px solid var(--border)}
+.about-feat svg{width:24px;height:24px;color:var(--navy);flex-shrink:0;margin-top:2px}
+.about-feat h4{font-size:14px;color:var(--navy-deep);margin-bottom:4px;font-weight:600}
+.about-feat p{font-size:12px;color:var(--text-muted);line-height:1.6}
+
+/* ========== ROOMS ========== */
+.rooms-filter{display:flex;gap:12px;margin-bottom:40px;flex-wrap:wrap}
+.filter-btn{padding:8px 20px;border:1px solid var(--border);border-radius:30px;font-size:13px;letter-spacing:1px;cursor:pointer;background:transparent;color:var(--text-muted);transition:all .3s}
+.filter-btn.active,.filter-btn:hover{background:var(--navy);color:var(--cream);border-color:var(--navy)}
+.rooms-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:28px}
+.room-card{background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:all .4s;cursor:pointer}
+.room-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px var(--shadow)}
+.room-img{position:relative;aspect-ratio:16/10;background:var(--cream-dark);overflow:hidden}
+.room-img-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px}
+.room-img-inner svg{width:48px;height:48px;color:var(--navy);opacity:.25}
+.room-img-inner span{font-size:11px;color:var(--text-muted);letter-spacing:1px}
+.room-slider{position:relative;aspect-ratio:16/10;background:var(--cream-dark);overflow:hidden}
+.room-slider-inner{position:relative;width:100%;height:100%}
+.room-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease}
+.room-slide.active{opacity:1}
+.room-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.room-badge{position:absolute;top:16px;left:16px;padding:4px 14px;background:var(--navy);color:var(--cream);font-size:11px;letter-spacing:2px;border-radius:4px;z-index:5}
+.room-badge.hot{background:var(--red-brick)}
+.room-body{padding:24px}
+.room-name{font-size:18px;color:var(--navy-deep);font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.room-desc{font-size:13px;color:var(--text-muted);line-height:1.7;margin-bottom:16px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.room-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.room-tag{padding:4px 12px;background:var(--cream);border-radius:20px;font-size:11px;color:var(--navy);letter-spacing:1px}
+.room-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)}
+.room-price{font-size:22px;color:var(--red-brick);font-weight:700}
+.room-price span{font-size:13px;color:var(--text-muted);font-weight:400}
+.room-btn{padding:8px 24px;background:var(--navy);color:var(--cream);font-size:12px;letter-spacing:2px;border-radius:4px;border:none;cursor:pointer;transition:background .3s}
+.room-btn:hover{background:var(--navy-light)}
+
+/* ========== ROOM DETAIL MODAL ========== */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:2000;display:none;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(4px)}
+.modal-overlay.show{display:flex}
+.modal{background:var(--cream);border-radius:16px;max-width:720px;width:100%;max-height:85vh;overflow-y:auto;position:relative}
+.modal-close{position:sticky;top:16px;right:16px;float:right;width:40px;height:40px;border-radius:50%;background:var(--white);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:all .3s}
+.modal-close:hover{background:var(--red-brick);border-color:var(--red-brick)}
+.modal-close svg{width:18px;height:18px;color:var(--text-dark)}
+.modal-close:hover svg{color:var(--white)}
+.modal-img{width:100%;aspect-ratio:16/9;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px}
+.modal-slider{position:relative;overflow:hidden;aspect-ratio:16/9;background:var(--cream-dark)}
+.modal-slider-inner{position:relative;width:100%;height:100%}
+.modal-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease}
+.modal-slide.active{opacity:1}
+.modal-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.modal-img svg{width:60px;height:60px;color:var(--navy);opacity:.2}
+.modal-body{padding:32px}
+.modal-name{font-size:24px;color:var(--navy-deep);font-weight:700;letter-spacing:2px;margin-bottom:8px}
+.modal-sub{font-size:14px;color:var(--gold);letter-spacing:1px;margin-bottom:20px}
+.modal-desc{font-size:14px;color:var(--text-muted);line-height:1.8;margin-bottom:24px}
+.modal-specs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px}
+.modal-spec{text-align:center;padding:16px;background:var(--white);border-radius:8px;border:1px solid var(--border)}
+.modal-spec svg{width:28px;height:28px;color:var(--navy);margin:0 auto 8px}
+.modal-spec p{font-size:12px;color:var(--text-muted)}
+.modal-spec strong{display:block;font-size:16px;color:var(--navy-deep);margin-bottom:2px}
+.modal-amenities{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.modal-amenity{padding:6px 14px;background:var(--white);border:1px solid var(--border);border-radius:20px;font-size:12px;color:var(--navy);display:flex;align-items:center;gap:6px}
+.modal-amenity svg{width:14px;height:14px;color:var(--gold)}
+.modal-cta{display:flex;align-items:center;justify-content:space-between;padding:24px;background:var(--navy);border-radius:12px;color:var(--cream)}
+.modal-cta-price{font-size:28px;font-weight:700}
+.modal-cta-price span{font-size:14px;font-weight:400;opacity:.7}
+.modal-cta .room-btn{background:var(--gold);font-size:13px;padding:12px 32px}
+
+/* ========== PUBLIC SPACES ========== */
+.spaces-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(480px,1fr));gap:32px}
+.space-card{background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:all .4s}
+.space-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px var(--shadow)}
+.space-slider{position:relative;aspect-ratio:16/10;background:var(--cream-dark);overflow:hidden}
+.space-slider-inner{position:relative;width:100%;height:100%}
+.space-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s ease}
+.space-slide.active{opacity:1}
+.space-slide img{width:100%;height:100%;object-fit:cover;display:block}
+.slider-arrow{position:absolute;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.85);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:5;transition:all .3s;opacity:.7}
+.space-card:hover .slider-arrow,.room-card:hover .slider-arrow{opacity:1}
+.slider-arrow:hover{background:var(--navy);border-color:var(--navy);transform:translateY(-50%) scale(1.1)}
+.slider-arrow:hover svg{color:var(--cream)}
+.slider-arrow svg{width:16px;height:16px;color:var(--text-dark);transition:color .3s}
+.slider-arrow.prev{left:12px}
+.slider-arrow.next{right:12px}
+.slider-dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);display:flex;gap:6px;z-index:6}
+.slider-dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.5);cursor:pointer;transition:all .3s;border:none;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.slider-dot.active{background:var(--white);transform:scale(1.3);box-shadow:0 0 6px rgba(255,255,255,.5)}
+.slider-dot:hover{background:rgba(255,255,255,.8)}
+.slide-counter{position:absolute;top:12px;right:12px;padding:3px 10px;background:rgba(0,0,0,.45);color:#fff;font-size:12px;border-radius:20px;z-index:6;letter-spacing:1px;backdrop-filter:blur(4px)}
+.space-body{padding:24px}
+.space-name{font-size:18px;color:var(--navy-deep);font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.space-desc{font-size:13px;color:var(--text-muted);line-height:1.7}
+.space-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.space-tag{padding:4px 12px;background:var(--cream);border-radius:20px;font-size:11px;color:var(--navy);letter-spacing:1px}
+@media(max-width:768px){
+  .spaces-grid{grid-template-columns:1fr}
+}
+
+/* ========== SHOP ========== */
+.shop{background:var(--white)}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:24px}
+.shop-card{background:var(--cream);border-radius:12px;overflow:hidden;border:1px solid var(--border);transition:all .3s;cursor:pointer}
+.shop-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px var(--shadow)}
+.shop-img{aspect-ratio:1;background:var(--cream-dark);overflow:hidden}
+.shop-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.shop-card:hover .shop-img img{transform:scale(1.05)}
+.shop-body{padding:20px}
+.shop-cat{font-size:11px;color:var(--gold);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.shop-name{font-size:16px;color:var(--navy-deep);font-weight:600;letter-spacing:1px;margin-bottom:6px}
+.shop-desc{font-size:12px;color:var(--text-muted);line-height:1.6;margin-bottom:12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.shop-price-row{display:flex;align-items:center;justify-content:space-between}
+.shop-price{font-size:18px;color:var(--red-brick);font-weight:700}
+.shop-price span{font-size:12px;color:var(--text-muted);font-weight:400;text-decoration:line-through;margin-left:8px}
+.shop-cart{width:36px;height:36px;border-radius:50%;background:var(--navy);color:var(--cream);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s}
+.shop-cart:hover{background:var(--red-brick);transform:scale(1.1)}
+.shop-cart svg{width:16px;height:16px}
+
+/* ========== REVIEWS ========== */
+.reviews{background:var(--cream)}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:24px}
+.review-card{background:var(--white);border-radius:12px;padding:28px;border:1px solid var(--border);transition:all .4s;position:relative;overflow:hidden}
+.review-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px var(--shadow)}
+.review-card::before{content:'\201C';position:absolute;top:12px;right:24px;font-size:72px;color:var(--gold);opacity:.15;line-height:1;font-family:'Georgia',serif}
+.review-stars{display:flex;gap:3px;margin-bottom:12px}
+.review-stars svg{width:16px;height:16px;color:var(--gold)}
+.review-text{font-size:14px;color:var(--text-dark);line-height:1.8;margin-bottom:20px;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.review-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border)}
+.review-author{display:flex;align-items:center;gap:10px}
+.review-avatar{width:36px;height:36px;border-radius:50%;background:var(--navy);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;letter-spacing:1px;flex-shrink:0}
+.review-name{font-size:14px;color:var(--navy-deep);font-weight:600;letter-spacing:1px}
+.review-date{font-size:12px;color:var(--text-muted)}
+@media(max-width:768px){
+  .reviews-grid{grid-template-columns:1fr}
+}
+
+/* ========== CONTACT / FOOTER ========== */
+.contact-section{background:var(--navy-deep);color:var(--cream);padding:80px 24px}
+.contact-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.contact-info h3{font-size:20px;letter-spacing:3px;margin-bottom:24px}
+.contact-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:20px}
+.contact-item svg{width:20px;height:20px;color:var(--gold);flex-shrink:0;margin-top:4px}
+.contact-item p{font-size:14px;line-height:1.7;opacity:.85}
+.contact-form input,.contact-form textarea{width:100%;padding:14px 16px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:var(--cream);font-size:14px;font-family:inherit;margin-bottom:16px;outline:none;transition:border-color .3s}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:rgba(255,255,255,.4)}
+.contact-form input:focus,.contact-form textarea:focus{border-color:var(--gold)}
+.contact-form textarea{height:120px;resize:vertical}
+.contact-form button{padding:14px 40px;background:var(--gold);color:var(--white);border:none;border-radius:4px;font-size:14px;letter-spacing:2px;cursor:pointer;transition:background .3s;font-family:inherit}
+.contact-form button:hover{background:var(--gold-light);color:var(--navy-deep)}
+
+.footer{background:var(--navy);padding:24px;text-align:center;color:rgba(255,255,255,.5);font-size:12px;letter-spacing:1px}
+.footer a{color:var(--gold-light)}
+
+/* ========== SCROLL ANIMATIONS ========== */
+.fade-up{opacity:0;transform:translateY(30px);transition:all .6s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* ========== MOBILE NAV ========== */
+@media(max-width:768px){
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(253,246,236,0.98);flex-direction:column;padding:20px 24px;gap:16px;border-bottom:1px solid var(--border)}
+  .nav-links.open{display:flex}
+  .nav-toggle{display:flex}
+  .about-grid,.contact-inner{grid-template-columns:1fr;gap:40px}
+  .rooms-grid{grid-template-columns:1fr}
+  .modal-specs{grid-template-columns:1fr 1fr}
+  .hero-title{letter-spacing:3px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== NAV ==================== -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <img src="logo.png" alt="鲤途·陆壹叁">
+      <span class="nav-logo-text">鲤途·陆壹叁</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">关于住宿</a></li>
+      <li><a href="#reviews">住客好评</a></li>
+      <li><a href="#rooms">房型展示</a></li>
+      <li><a href="#spaces">公共区域</a></li>
+      <li><a href="#shop">好物贩卖</a></li>
+      <li><a href="#contact">联系我们</a></li>
+    </ul>
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero" id="home">
+  <div class="hero-pattern"></div>
+  <div class="hero-arch"></div>
+    <div class="hero-content">
+      <p class="hero-tag">Nanyang Heritage Stay</p>
+      <div class="hero-logo-wrap">
+          <img src="logo.png" alt="鲤途·陆壹叁" class="hero-logo">
+      </div>
+      <p class="hero-sub">泉州古城中山南路613号 · 南洋风格住宿</p>
+      <a href="#rooms" class="hero-btn">探索房型</a>
+    </div>
+  <div class="hero-scroll">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- ==================== ABOUT ==================== -->
+<section class="about section" id="about">
+  <div class="about-grid">
+    <div class="about-img fade-up">
+      <div class="about-img-inner">
+        <img src="nanyang_architecture_grid.jpg" alt="泉州南洋风建筑" style="width:100%;height:100%;object-fit:contain;display:block">
+      </div>
+    </div>
+    <div class="fade-up">
+      <p class="section-tag">About Us</p>
+      <h2 class="section-title">一处南洋旧梦</h2>
+      <div class="section-line"></div>
+      <p class="section-desc" style="margin-bottom:20px">
+        坐落于泉州古城文庙西街，紧邻府文庙。鲤途·陆壹叁是一处融合南洋殖民风情与闽南传统建筑美学的精品住宿。11间精心设计的客房，涵盖7种房型，从经济实惠的房型到自带独立阳台的天台房，每一间都在讲述一个关于漂泊与归来的故事。
+      </p>
+      <p class="section-desc" style="margin-bottom:32px">
+        花砖地面、藤编家具、复古吊扇、铁艺栏杆——这些来自南洋的旧时记忆，在泉州的红砖古厝间重新苏醒。推窗便是千年古城的天际线，入夜则沉浸于温暖的灯光与茶香之中。
+      </p>
+      <div class="about-features">
+        <div class="about-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <div><h4>11间客房</h4><p>7种房型随心选</p></div>
+        </div>
+        <div class="about-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><h4>古城核心</h4><p>步行可达文庙</p></div>
+        </div>
+        <div class="about-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12"/><path d="M12 6v6l4 2"/></svg>
+          <div><h4>百年建筑</h4><p>南洋风格修复</p></div>
+        </div>
+        <div class="about-feat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <div><h4>管家服务</h4><p>贴心入住体验</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== REVIEWS ==================== -->
+<section class="reviews section" id="reviews">
+  <div class="fade-up">
+    <p class="section-tag">Guest Reviews</p>
+    <h2 class="section-title">住客好评 · 温暖回响</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">每一位旅人的真实声音，都是鲤途·陆壹叁不断前行的动力。</p>
+  </div>
+  <div class="reviews-grid" id="reviewsGrid">
+    <!-- Review cards will be generated by JS -->
+  </div>
+</section>
+
+<!-- ==================== ROOMS ==================== -->
+<section class="section" id="rooms">
+  <div class="fade-up">
+    <p class="section-tag">Our Rooms</p>
+    <h2 class="section-title">七种房型 · 七种心境</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">从温馨大床房到家庭套房，每一间都保留了南洋建筑的精髓，同时融入现代舒适设施。</p>
+  </div>
+  <div class="rooms-filter fade-up">
+    <button class="filter-btn active" data-filter="all">全部房型</button>
+    <button class="filter-btn" data-filter="double-no">大床房（无窗）</button>
+    <button class="filter-btn" data-filter="double-in">大床房（内窗）</button>
+    <button class="filter-btn" data-filter="double-a">大床房A（外窗）</button>
+    <button class="filter-btn" data-filter="double-b">大床房B（外窗）</button>
+    <button class="filter-btn" data-filter="double-senior">高级大床房（外窗）</button>
+    <button class="filter-btn" data-filter="twin">双床房</button>
+    <button class="filter-btn" data-filter="special">天台房</button>
+  </div>
+  <div class="rooms-grid" id="roomsGrid">
+    <!-- Room cards will be generated by JS -->
+  </div>
+</section>
+
+<!-- ==================== PUBLIC SPACES ==================== -->
+<section class="section" id="spaces">
+  <div class="fade-up">
+    <p class="section-tag">Public Spaces</p>
+    <h2 class="section-title">公共区域 · 共享南洋时光</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">在鲤途·陆壹叁，旅途不止于房间。这些精心打造的公共空间，是住客交流、休憩、品茗的最佳场所。</p>
+  </div>
+  <div class="spaces-grid" id="spacesGrid">
+    <!-- Space cards will be generated by JS -->
+  </div>
+</section>
+
+<!-- ==================== SHOP ==================== -->
+<section class="shop section" id="shop">
+  <div class="fade-up">
+    <p class="section-tag">Gift Shop</p>
+    <h2 class="section-title">鲤途好物 · 带走南洋记忆</h2>
+    <div class="section-line"></div>
+    <p class="section-desc">精选南洋风家居好物，让旅途的记忆延续到日常生活之中。</p>
+  </div>
+  <div class="shop-grid" id="shopGrid">
+    <!-- Shop cards will be generated by JS -->
+  </div>
+</section>
+
+<!-- ==================== CONTACT ==================== -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="fade-up">
+      <h3>联系我们</h3>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <p>福建省泉州市鲤城区<br>中山南路613号</p>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <p>电话：0595-22259996<br>（10:00 - 22:00）</p>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <p>微信：LITULYS<br>小红书：@鲤途</p>
+      </div>
+    </div>
+    <div class="fade-up">
+      <form class="contact-form" onsubmit="event.preventDefault();showToast('感谢您的留言，我们会尽快回复！')">
+        <input type="text" placeholder="您的姓名" required>
+        <input type="tel" placeholder="联系电话" required>
+        <input type="date" required>
+        <textarea placeholder="留言内容（如需预订请说明房型与入住人数）"></textarea>
+        <button type="submit">提交留言</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <p>© 2026 鲤途·陆壹叁 南洋风格住宿 · 泉州古城中山南路613号</p>
+  <p style="margin-top:8px"><a href="#">隐私政策</a> · <a href="#">服务条款</a> · <a href="#">营业执照</a></p>
+</footer>
+
+<!-- ==================== MODAL ==================== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- ==================== TOAST ==================== -->
+<div id="toast" style="position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:var(--cream);padding:14px 28px;border-radius:8px;font-size:14px;letter-spacing:1px;z-index:3000;opacity:0;transition:all .4s;pointer-events:none"></div>
+
+<script>
+// ========== DATA ==========
+const rooms = [
+  {
+    id:1, name:"大床房（内窗）", type:"double-in", badge:"经济", hot:false,
+    area:"18㎡", bed:"1.5m大床", floor:"1F", max:"2人",
+    price:240, priceUnit:"晚",
+    desc:"温馨舒适的大床房，配以内窗设计，采光柔和。南洋花砖地面搭配简约家具，性价比之选，适合预算有限的背包客与情侣出行。独立卫浴、空调WiFi一应俱全。",
+    tags:["内窗","花砖地","性价比","独立卫浴"],
+    amenities:["WiFi","空调","热水器","吹风机","拖鞋","热水壶","投影仪","茶具套装","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_1.jpg","rooms/room_1a.jpg","rooms/room_1b.jpg","rooms/room_1c.jpg","rooms/room_1d.jpg","rooms/room_1e.jpg","rooms/room_1f.jpg"]
+  },
+  {
+    id:2, name:"大床房（无窗）", type:"double-no", badge:"实惠", hot:false,
+    area:"16㎡", bed:"1.5m大床", floor:"2-3F", max:"2人",
+    price:150, priceUnit:"晚",
+    desc:"紧凑型无窗大床房，虽然空间不大但五脏俱全。智能新风系统保持空气流通，搭配暖色灯光营造温馨氛围。泉州古城一晚好眠的最优价格。",
+    tags:["无窗","新风系统","超值","古城住宿"],
+    amenities:["WiFi","空调","热水器","吹风机","拖鞋","热水壶","茶具套装","电视","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_2.jpg","rooms/room_2a.jpg","rooms/room_2b.jpg","rooms/room_2c.jpg","rooms/room_2d.jpg"]
+  },
+  {
+    id:3, name:"大床房A（外窗）", type:"double-a", badge:"舒适", hot:true,
+    area:"22㎡", bed:"1.5m大床", floor:"2-3F", max:"2人",
+    price:280, priceUnit:"晚",
+    desc:"面向古城街景的外窗大床房，推窗可见红砖古厝的屋檐与天空。1.5米大床配高品质床品，复古藤编家具与花砖地面，南洋风情满溢。入住体验与景观兼备的热门之选。",
+    tags:["外窗","古城景","1.5m大床","热门"],
+    amenities:["WiFi","空调","热水器","吹风机","投影仪","拖鞋","茶具套装","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_3.jpg","rooms/room_3a.jpg","rooms/room_3b.jpg","rooms/room_3c.jpg","rooms/room_3d.jpg"]
+  },
+  {
+    id:4, name:"双床房", type:"twin", badge:"双床", hot:false,
+    area:"26㎡", bed:"1.2m×2", floor:"3F", max:"2人",
+    price:419, priceUnit:"晚",
+    desc:"两张1.2米单人床的灵活布局，适合好友结伴或出差同事同行。花砖地面与南洋风情装饰，窗外可见古城街景或庭院绿意。独立卫浴、优质床品，差旅住宿的理想选择。",
+    tags:["双床","灵活","古城景","差旅优选"],
+    amenities:["WiFi","空调","热水器","吹风机","办公桌椅","电视","拖鞋","茶具套装","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_4.jpg","rooms/room_4a.jpg","rooms/room_4b.jpg","rooms/room_4c.jpg","rooms/room_4d.jpg","rooms/room_4e.jpg"]
+  },
+  {
+    id:5, name:"大床房B（外窗）", type:"double-b", badge:"舒适", hot:false,
+    area:"22㎡", bed:"1.5m大床", floor:"2-3F", max:"2人",
+    price:280, priceUnit:"晚",
+    desc:"外窗大床房B款，面向古城街景，推窗可见红砖古厝的屋檐与天际线。1.5米大床配高品质床品，南洋花砖地面与复古藤编家具，温馨舒适。与大床房A同享外窗景观，布局略有不同，为住客提供更多选择。",
+    tags:["外窗","古城景","1.5m大床","南洋风"],
+    amenities:["WiFi","空调","热水器","吹风机","投影仪","拖鞋","茶具套装","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_5.jpg","rooms/room_5a.jpg","rooms/room_5b.jpg","rooms/room_5c.jpg","rooms/room_5d.jpg"]
+  },
+  {
+    id:6, name:"天台房（独立阳台）", type:"special", badge:"天台", hot:true,
+    area:"28㎡", bed:"1.5m大床", floor:"4F", max:"2人",
+    price:470, priceUnit:"晚",
+    desc:"四楼天台景观房，自带独立私享阳台。晨起可在阳台上远眺古城天际线，夜晚则沐浴在星光与古城灯火之中。房间内保留了原始建筑的天花板木梁，搭配南洋风藤编家具与复古吊扇，是最具人气的网红打卡房型。",
+    tags:["独立阳台","天台","古城天际线","网红打卡"],
+    amenities:["WiFi","空调","热水器","吹风机","阳台座椅","投影仪","茶具套装","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_6.jpg","rooms/room_6a.jpg","rooms/room_6b.jpg","rooms/room_6c.jpg","rooms/room_6d.jpg"]
+  },
+  {
+    id:7, name:"高级大床房", type:"double-senior", badge:"精选", hot:false,
+    area:"24㎡", bed:"1.8m大床", floor:"2F", max:"2人",
+    price:320, priceUnit:"晚",
+    desc:"升级版外窗大床房，空间更为宽敞。特别增设了中式茶席区域，窗外是泉州古城的烟火日常。铁艺栏杆、复古吊扇与南洋绿植，在房间内即可感受到南洋旧时光的悠然。作为大床房系列的精选升级款，入住体验再上一个台阶。",
+    tags:["外窗","茶席","南洋风","宽敞"],
+    amenities:["WiFi","空调","热水器","吹风机","茶具套装","投影仪","一次性洗漱用品","一次性马桶垫"],
+    imgs:["rooms/room_7.jpg","rooms/room_7a.jpg","rooms/room_7b.jpg","rooms/room_7c.jpg","rooms/room_7d.jpg","rooms/room_7e.jpg"]
+  }
+];
+
+const publicSpaces = [
+  {
+    id:1, name:"南洋风大厅",
+    desc:"推门而入便是浓郁南洋气息的大厅，绿墙花砖地面、木质吧台与复古展示柜相映成趣。这里是办理入住、交友聊天的温馨空间，午后阳光洒入，时光悠然。",
+    imgs:["spaces/space_1.jpg","spaces/space_1b.jpg","spaces/space_1c.jpg","spaces/space_1d.jpg","spaces/space_1e.jpg","spaces/space_1f.jpg","spaces/space_1g.jpg","spaces/space_1h.jpg","spaces/space_1i.jpg","spaces/space_1j.jpg","spaces/space_1k.jpg"],
+    tags:["接待大厅","花砖地面","社交空间"]
+  },
+  {
+    id:2, name:"天台休闲区",
+    desc:"四楼天台开放式露台，遮阳伞下藤编座椅环绕，花砖地面与古城天际线尽收眼底。傍晚可观日落，入夜灯串亮起，是品茗小酌、仰望星空的绝佳去处。",
+    imgs:["spaces/space_2.jpg","spaces/space_2b.jpg"],
+    tags:["工夫茶","阅读角落","慢生活"]
+  }
+];
+
+const shopItems = [
+  {
+    name:"深度睡眠枕头",
+    category:"寝具",
+    desc:"精选记忆棉材质，符合人体工学设计，为旅途中的你带来一夜深度好眠。",
+    price:"¥150",
+    img:"shop/shop_pillow.jpg"
+  },
+  {
+    name:"深度睡眠床垫",
+    category:"寝具",
+    desc:"独立袋装弹簧搭配天然乳胶层，软硬适中，还原五星级酒店的舒适睡眠体验。",
+    price:"¥2000-3000",
+    img:"shop/shop_mattress.jpg"
+  },
+  {
+    name:"闽南精选茶叶",
+    category:"茶饮",
+    desc:"甄选安溪铁观音与武夷岩茶，泉州市井好味道，伴手礼佳选。",
+    price:"¥100起",
+    img:"shop/shop_tea.jpg"
+  },
+  {
+    name:"泉州特产代购",
+    category:"服务",
+    desc:"帮你搜罗泉州地道好物——古早味零食、手工艺品、地方特产，代购寄送一站式服务。",
+    price:"实价",
+    img:"shop/shop_souvenir.jpg"
+  }
+];
+
+const reviews = [
+  {
+    name:"轩*", stars:5, date:"2026年4月",
+    text:"民宿位置非常好就在文庙附近去巴浪鱼等热店铺都很近房东人很好还让我们住一楼茶桌泡茶有求必应房间面积不算大就是五脏俱全化妆镜吹风机梳子等等枕头和床垫很软很舒服任的很舒适"
+  },
+  {
+    name:"笑看*生", stars:5, date:"2026年5月",
+    text:"房间干净整洁，品质不错，价格亲民。店员态度非常好，热心介绍当地美食，棒棒哒～值得推荐！祝老板生意兴隆。"
+  },
+  {
+    name:"李*", stars:5, date:"2026年3月",
+    text:"环境很好单面装修很小清新拍照的冲这家肯定没错。地理位置很好基本儿大景点都是步行可达。楼梯拐弯处很多休闲休息的区域"
+  },
+  {
+    name:"赵*安", stars:5, date:"2026年3月",
+    text:"房间很有特色，南洋风格的装修让人眼前一亮。服务人员热情周到，地理位置优越，靠近各大景点。推荐，下次来泉州还会选择这里。"
+  },
+  {
+    name:"张*", stars:5, date:"2026年2月",
+    text:"非常不错，来过很多次了，很不错很不错！已经推荐给朋友了。"
+  },
+  {
+    name:"陈*", stars:5, date:"2026年3月",
+    text:"第一次来泉州，选了这家民宿，体验超赞！服务贴心，阳台很舒服，可以晒太阳看古城，房间里打扫得非常干净，下次回泉州还要住这里。"
+  }
+];
+
+// ========== RENDER ROOMS ==========
+function renderRooms(filter='all'){
+  const grid = document.getElementById('roomsGrid');
+  const filtered = filter==='all' ? rooms : rooms.filter(r=>r.type===filter);
+  grid.innerHTML = filtered.map(room=>{
+    const slideImgs = room.imgs.map((src,i)=>`<div class="room-slide${i===0?' active':''}"><img src="${src}" alt="${room.name}" onerror="this.style.display='none'"></div>`).join('');
+    const dots = room.imgs.length>1 ? room.imgs.map((_,i)=>`<button class="slider-dot${i===0?' active':''}" onclick="event.stopPropagation();goRoomSlide(${room.id},${i})" data-idx="${i}" data-room="${room.id}"></button>`).join('') : '';
+    const arrows = room.imgs.length>1 ? `
+      <button class="slider-arrow prev" onclick="event.stopPropagation();slideRoom(${room.id},-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <button class="slider-arrow next" onclick="event.stopPropagation();slideRoom(${room.id},1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg></button>
+    ` : '';
+    const counter = room.imgs.length>1 ? `<span class="slide-counter" id="room-counter-${room.id}">1/${room.imgs.length}</span>` : '';
+    return `
+    <div class="room-card fade-up visible" onclick="openRoomModal(${room.id})" data-room-id="${room.id}">
+      <div class="room-slider" id="room-slider-${room.id}" onmouseenter="pauseAutoPlay('room',${room.id})" onmouseleave="startAutoPlay('room',${room.id})">
+        <div class="room-slider-inner">${slideImgs}</div>
+        ${arrows}
+        <div class="slider-dots">${dots}</div>
+        ${counter}
+        <span class="room-badge ${room.hot?'hot':''}">${room.badge}</span>
+      </div>
+      <div class="room-body">
+        <h3 class="room-name">${room.name}</h3>
+        <p class="room-desc">${room.desc}</p>
+        <div class="room-tags">${room.tags.map(t=>`<span class="room-tag">${t}</span>`).join('')}</div>
+        <div class="room-footer">
+          <div class="room-price">¥${room.price}<span>/${room.priceUnit}</span></div>
+          <button class="room-btn">查看详情</button>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+}
+
+// ========== RENDER PUBLIC SPACES ==========
+function renderSpaces(){
+  const grid = document.getElementById('spacesGrid');
+  grid.innerHTML = publicSpaces.map(space=>{
+    const slideImgs = space.imgs.map((src,i)=>`<div class="space-slide${i===0?' active':''}"><img src="${src}" alt="${space.name}" onerror="this.style.display='none'"></div>`).join('');
+    const dots = space.imgs.map((_,i)=>`<button class="slider-dot${i===0?' active':''}" onclick="goSpaceSlide(${space.id},${i})" data-idx="${i}" data-space="${space.id}"></button>`).join('');
+    return `
+    <div class="space-card fade-up visible">
+      <div class="space-slider" id="slider-${space.id}">
+        <div class="space-slider-inner">${slideImgs}</div>
+        <button class="slider-arrow prev" onclick="slideSpace(${space.id},-1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="slider-arrow next" onclick="slideSpace(${space.id},1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+        </button>
+        <div class="slider-dots">${dots}</div>
+      </div>
+      <div class="space-body">
+        <h3 class="space-name">${space.name}</h3>
+        <p class="space-desc">${space.desc}</p>
+        <div class="space-tags">${space.tags.map(t=>`<span class="space-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+const spaceSliderState = {};
+function slideSpace(spaceId, dir){
+  const space = publicSpaces.find(s=>s.id===spaceId);
+  if(!space) return;
+  if(!spaceSliderState[spaceId]) spaceSliderState[spaceId] = 0;
+  const total = space.imgs.length;
+  let idx = spaceSliderState[spaceId] + dir;
+  if(idx < 0) idx = total - 1;
+  if(idx >= total) idx = 0;
+  spaceSliderState[spaceId] = idx;
+  const slider = document.getElementById('slider-'+spaceId);
+  if(slider) slider.querySelectorAll('.space-slide').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.slider-dot[data-space="'+spaceId+'"]').forEach((d,i)=>{
+    d.classList.toggle('active', i===idx);
+  });
+}
+function goSpaceSlide(spaceId, targetIdx){
+  const space = publicSpaces.find(s=>s.id===spaceId);
+  if(!space) return;
+  spaceSliderState[spaceId] = targetIdx;
+  const slider = document.getElementById('slider-'+spaceId);
+  if(slider) slider.querySelectorAll('.space-slide').forEach((s,i)=>s.classList.toggle('active',i===targetIdx));
+  document.querySelectorAll('.slider-dot[data-space="'+spaceId+'"]').forEach((d,i)=>{
+    d.classList.toggle('active', i===targetIdx);
+  });
+}
+
+const roomSliderState = {};
+function slideRoom(roomId, dir){
+  const room = rooms.find(r=>r.id===roomId);
+  if(!room || room.imgs.length<=1) return;
+  if(!roomSliderState[roomId]) roomSliderState[roomId] = 0;
+  const total = room.imgs.length;
+  let idx = roomSliderState[roomId] + dir;
+  if(idx < 0) idx = total - 1;
+  if(idx >= total) idx = 0;
+  roomSliderState[roomId] = idx;
+  const slider = document.getElementById('room-slider-'+roomId);
+  if(slider) slider.querySelectorAll('.room-slide').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.slider-dot[data-room="'+roomId+'"]').forEach((d,i)=>{
+    d.classList.toggle('active', i===idx);
+  });
+  const counter = document.getElementById('room-counter-'+roomId);
+  if(counter) counter.textContent = (idx+1)+'/'+total;
+}
+function goRoomSlide(roomId, targetIdx){
+  const room = rooms.find(r=>r.id===roomId);
+  if(!room) return;
+  roomSliderState[roomId] = targetIdx;
+  const slider = document.getElementById('room-slider-'+roomId);
+  if(slider) slider.querySelectorAll('.room-slide').forEach((s,i)=>s.classList.toggle('active',i===targetIdx));
+  document.querySelectorAll('.slider-dot[data-room="'+roomId+'"]').forEach((d,i)=>{
+    d.classList.toggle('active', i===targetIdx);
+  });
+  const counter = document.getElementById('room-counter-'+roomId);
+  if(counter) counter.textContent = (targetIdx+1)+'/'+room.imgs.length;
+}
+
+// ========== RENDER SHOP ==========
+function renderShop(){
+  const grid = document.getElementById('shopGrid');
+  grid.innerHTML = shopItems.map(item=>`
+    <div class="shop-card fade-up visible">
+      <div class="shop-img">
+        <img src="${item.img}" alt="${item.name}" loading="lazy">
+      </div>
+      <div class="shop-body">
+        <p class="shop-cat">${item.category}</p>
+        <h3 class="shop-name">${item.name}</h3>
+        <p class="shop-desc">${item.desc}</p>
+        <div class="shop-price-row">
+          <div class="shop-price">${item.price}</div>
+          <button class="shop-cart" onclick="event.stopPropagation();addToCart('${item.name}')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== RENDER REVIEWS ==========
+function renderReviews(){
+  const grid = document.getElementById('reviewsGrid');
+  const starSVG = '<svg viewBox="0 0 16 16" fill="currentColor"><polygon points="8 1 10.5 5.8 16 6.7 12 10.5 13 16 8 13.5 3 16 4 10.5 0 6.7 5.5 5.8"/></svg>';
+  grid.innerHTML = reviews.map(r=>`
+    <div class="review-card fade-up visible">
+      <div class="review-stars">${Array(r.stars).fill(starSVG).join('')}</div>
+      <p class="review-text">${r.text}</p>
+      <div class="review-footer">
+        <div class="review-author">
+          <div class="review-avatar">${r.name.charAt(0)}</div>
+          <span class="review-name">${r.name}</span>
+        </div>
+        <span class="review-date">${r.date}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ========== MODAL ==========
+function openRoomModal(id){
+  const room = rooms.find(r=>r.id===id);
+  if(!room) return;
+  const modal = document.getElementById('modalContent');
+  const modalSlides = room.imgs.map((src,i)=>`<div class="modal-slide${i===0?' active':''}"><img src="${src}" alt="${room.name}" onerror="this.style.display='none'"></div>`).join('');
+  const modalDots = room.imgs.length>1 ? room.imgs.map((_,i)=>`<button class="slider-dot${i===0?' active':''}" data-idx="${i}" data-modal="room-${room.id}"></button>`).join('') : '';
+  const modalArrows = room.imgs.length>1 ? `
+    <button class="slider-arrow prev" onclick="slideModalRoom(${room.id},-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <button class="slider-arrow next" onclick="slideModalRoom(${room.id},1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg></button>
+  ` : '';
+  modal.innerHTML = `
+    <div class="modal-slider" id="modal-slider-${room.id}">
+      <div class="modal-slider-inner">${modalSlides}</div>
+      ${modalArrows}
+      <div class="slider-dots">${modalDots}</div>
+    </div>
+    <div class="modal-body">
+      <h2 class="modal-name">${room.name}</h2>
+      <p class="modal-sub">${room.badge} · ${room.name}</p>
+      <p class="modal-desc">${room.desc}</p>
+      <div class="modal-specs">
+        <div class="modal-spec">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="24" height="24" rx="2"/><line x1="2" y1="10" x2="26" y2="10"/><line x1="10" y1="10" x2="10" y2="26"/></svg>
+          <strong>${room.area}</strong><p>房间面积</p>
+        </div>
+        <div class="modal-spec">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="12" width="20" height="12" rx="2"/><path d="M7 12V8a7 7 0 0 1 14 0v4"/></svg>
+          <strong>${room.bed}</strong><p>床型</p>
+        </div>
+        <div class="modal-spec">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="14" cy="10" r="6"/><path d="M4 26c0-6 4-10 10-10s10 4 10 10"/></svg>
+          <strong>${room.max}</strong><p>最多入住</p>
+        </div>
+      </div>
+      <h4 style="font-size:14px;color:var(--navy-deep);margin-bottom:12px;letter-spacing:1px">房间设施</h4>
+      <div class="modal-amenities">
+        ${room.amenities.map(a=>`<span class="modal-amenity"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l3.5 3.5L12 4"/></svg>${a}</span>`).join('')}
+      </div>
+      <div class="modal-cta">
+        <div class="modal-cta-price">¥${room.price}<span> /${room.priceUnit}</span></div>
+        <button class="room-btn" onclick="closeModal();showToast('请添加微信 LITULYS 进行预订')">立即预订</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('modalOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function slideModalRoom(roomId, dir){
+  const room = rooms.find(r=>r.id===roomId);
+  if(!room || room.imgs.length<=1) return;
+  if(!roomSliderState['modal-'+roomId]) roomSliderState['modal-'+roomId] = 0;
+  const total = room.imgs.length;
+  let idx = roomSliderState['modal-'+roomId] + dir;
+  if(idx < 0) idx = total - 1;
+  if(idx >= total) idx = 0;
+  roomSliderState['modal-'+roomId] = idx;
+  const slider = document.getElementById('modal-slider-'+roomId);
+  if(slider) slider.querySelectorAll('.modal-slide').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.slider-dot[data-modal="room-'+roomId+'"]').forEach((d,i)=>{
+    d.classList.toggle('active', i===idx);
+  });
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+
+document.getElementById('modalOverlay').addEventListener('click',function(e){
+  if(e.target===this) closeModal();
+});
+
+// ========== TOAST ==========
+function showToast(msg){
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.opacity='1';
+  toast.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>{
+    toast.style.opacity='0';
+    toast.style.transform='translateX(-50%) translateY(80px)';
+  },2500);
+}
+
+function addToCart(name){
+  showToast(`"${name}" 已加入心愿单`);
+}
+
+// ========== FILTER ==========
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    renderRooms(this.dataset.filter);
+  });
+});
+
+// ========== NAV ==========
+document.getElementById('navToggle').addEventListener('click',()=>{
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+document.querySelectorAll('.nav-links a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
+});
+
+// ========== SCROLL ANIMATION ==========
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting) e.target.classList.add('visible');
+  });
+},{threshold:0.1});
+
+function observeFadeElements(){
+  document.querySelectorAll('.fade-up:not(.visible)').forEach(el=>observer.observe(el));
+}
+
+// ========== INIT ==========
+renderRooms();
+renderSpaces();
+renderShop();
+renderReviews();
+observeFadeElements();
+
+// Re-observe after filter changes
+const origRender = renderRooms;
+renderRooms = function(filter='all'){
+  origRender(filter);
+  setTimeout(observeFadeElements,50);
+  // 重启自动轮播
+  clearAllAutoPlay();
+  setTimeout(initAutoPlay,100);
+};
+
+// ========== AUTO PLAY ==========
+const autoPlayTimers = {};
+function clearAllAutoPlay(){
+  Object.keys(autoPlayTimers).forEach(k=>clearInterval(autoPlayTimers[k]));
+  for(const k in autoPlayTimers) delete autoPlayTimers[k];
+}
+function startAutoPlay(type, id){
+  const key = type+'-'+id;
+  if(autoPlayTimers[key]) clearInterval(autoPlayTimers[key]);
+  const list = type==='room' ? rooms : publicSpaces;
+  const item = list.find(x=>x.id===id);
+  if(!item || item.imgs.length<=1) return;
+  autoPlayTimers[key] = setInterval(()=>{
+    if(type==='room') slideRoom(id,1);
+    else slideSpace(id,1);
+  },3000);
+}
+function pauseAutoPlay(type, id){
+  const key = type+'-'+id;
+  if(autoPlayTimers[key]) clearInterval(autoPlayTimers[key]);
+}
+function initAutoPlay(){
+  rooms.forEach(r=>{ if(r.imgs.length>1) startAutoPlay('room',r.id); });
+  publicSpaces.forEach(s=>{ if(s.imgs.length>1) startAutoPlay('space',s.id); });
+}
+setTimeout(initAutoPlay,500);
+</script>
+</body>
+</html>
